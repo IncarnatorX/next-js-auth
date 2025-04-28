@@ -76,7 +76,7 @@ export default function LoginPage() {
       {/* BUTTON */}
       <input
         type="submit"
-        value={loading ? "Authenticating" : "Signup"}
+        value={loading ? "Authenticating" : "Login"}
         disabled={loading}
         className={`px-4 py-2 rounded-md border-2 border-white transition-all ${
           loading ? "bg-gray-500 cursor-not-allowed" : "cursor-pointer"

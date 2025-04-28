@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-connectDB();
+await connectDB();
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,6 +51,12 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
       expiresIn: "1hr",
     });
+
+    if (!token) {
+      return NextResponse.json({ message: "Login failure." }, { status: 500 });
+    }
+
+    await User.updateOne({ email }, { token });
 
     const response = NextResponse.json(
       {
