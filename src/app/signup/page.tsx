@@ -10,11 +10,14 @@ export default function SignupPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
+  const inputClassName = `p-3 border-2 border-white outline-none rounded-md w-full valid:border-green-500 ${
+    loading ? "cursor-not-allowed" : ""
+  }`;
+
   async function handleSignup(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const formData = Object.fromEntries(new FormData(form));
-    form.reset();
 
     try {
       setLoading(true);
@@ -36,6 +39,7 @@ export default function SignupPage() {
       }
     } finally {
       setLoading(false);
+      form.reset();
     }
   }
 
@@ -53,7 +57,8 @@ export default function SignupPage() {
           name="username"
           id="username"
           placeholder="Enter username"
-          className="p-3 border-2 border-white outline-none rounded-md w-full valid:border-green-500"
+          className={inputClassName}
+          disabled={loading}
           required
         />
       </div>
@@ -66,7 +71,8 @@ export default function SignupPage() {
           name="email"
           id="email"
           placeholder="Enter email address"
-          className="p-3 border-2 border-white outline-none rounded-md w-full valid:border-green-500"
+          className={inputClassName}
+          disabled={loading}
           required
         />
       </div>
@@ -79,9 +85,10 @@ export default function SignupPage() {
           name="password"
           id="password"
           placeholder="Enter password"
-          className="p-3 border-2 border-white outline-none rounded-md w-full valid:border-green-500"
+          className={inputClassName}
           minLength={8}
           maxLength={30}
+          disabled={loading}
           required
         />
       </div>
@@ -95,7 +102,13 @@ export default function SignupPage() {
           loading ? "bg-gray-500 cursor-not-allowed" : "cursor-pointer"
         }`}
       />
-      <Link href={"/login"}>Already a Member! Login here</Link>
+      <Link href="/login" className="hover:underline">
+        Already a Member! Login here
+      </Link>
+
+      <Link href="/" className="hover:underline hover:text-green-300">
+        Home
+      </Link>
     </form>
   );
 }

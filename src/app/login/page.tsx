@@ -15,8 +15,6 @@ export default function LoginPage() {
     const form = event.target as HTMLFormElement;
     const formData = Object.fromEntries(new FormData(form));
 
-    form.reset();
-
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", formData);
@@ -35,6 +33,7 @@ export default function LoginPage() {
       }
     } finally {
       setLoading(false);
+      form.reset();
     }
   }
 
@@ -82,7 +81,12 @@ export default function LoginPage() {
           loading ? "bg-gray-500 cursor-not-allowed" : "cursor-pointer"
         }`}
       />
-      <Link href={"/signup"}>Not a Member! Signup here</Link>
+      <Link href="/signup" className="hover:underline">
+        Not a Member! Signup here
+      </Link>
+      <Link href="/" className="hover:underline hover:text-green-300">
+        Home
+      </Link>
     </form>
   );
 }

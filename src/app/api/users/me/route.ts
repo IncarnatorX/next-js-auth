@@ -1,5 +1,4 @@
 import connectDB from "@/dbConfig/dbConfig";
-import getDataFromToken from "@/helpers/getDataFromToken";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,7 +6,7 @@ await connectDB();
 
 export async function GET(request: NextRequest) {
   try {
-    const userID = getDataFromToken(request);
+    const userID = request.headers.get("x-user-id");
 
     if (!userID) {
       return NextResponse.json(
@@ -16,7 +15,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const user = await User.findById(userID).select("-password -token");
+    const user = await User.findById(userID).select("-password -token -__v");
 
     if (!user) {
       return NextResponse.json(

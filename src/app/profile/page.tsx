@@ -1,22 +1,17 @@
 "use client";
 
-type USER = {
-  _id: string;
-  username: string;
-  email: string;
-  isVerified: boolean;
-  isAdmin: boolean;
-};
-
+import { useAuthStore } from "@/store/auth";
 import axios, { AxiosError } from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const router = useRouter();
 
-  const [user, setUser] = useState<USER | null>(null);
+  const user = useAuthStore((store) => store.user);
+  const setUser = useAuthStore((store) => store.setUser);
 
   async function fetchUser() {
     try {
@@ -59,24 +54,39 @@ export default function ProfilePage() {
     }
   }
 
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <div>
-      <h1 className="text-center p-2">Profile page</h1>
+      <header className="p-4 flex w-full items-center">
+        <Link
+          href="/"
+          className="hover:underline hover:text-green-300"
+          title="Go to Home page"
+        >
+          Home
+        </Link>
+        <p className="grow text-center">Profile Page</p>
+        <button
+          className="px-4 py-2 cursor-pointer text-white border-2 border-white rounded"
+          onClick={logout}
+        >
+          Logout
+        </button>
+      </header>
+
       <button
-        className="px-4 py-2 cursor-pointer text-white border-2 border-white rounded"
-        onClick={logout}
-      >
-        Logout
-      </button>
-      <button
-        className="px-4 py-2 cursor-pointer text-white border-2 border-white rounded"
+        className="px-4 py-2 cursor-pointer text-white border-2 border-white rounded mx-4"
         onClick={fetchUser}
       >
         Fetch User
       </button>
+      <button></button>
       {user && (
         <div className="my-2 p-4">
-          User Details are:
+          <h1 className="font-bold text-2xl py-4">User Details are:</h1>
           <ul>
             <li>Username: {user?.username}</li>
             <li>Email: {user?.email}</li>

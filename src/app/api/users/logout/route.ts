@@ -1,19 +1,14 @@
 import connectDB from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
-import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 await connectDB();
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value as string;
+    const id = request.headers.get("x-user-id");
 
-    const decodedUser = jwt.verify(token, process.env.TOKEN_SECRET!);
-
-    const { id } = decodedUser as jwt.JwtPayload;
-
-    const user = await User.find({ id, token });
+    const user = await User.find({ id });
 
     if (!user) {
       return NextResponse.json(
