@@ -19,8 +19,8 @@ export default function ProfilePage() {
         withCredentials: true,
       });
       if (response.status === 200) {
-        toast.success(response.data.message);
         setUser(response.data.user);
+        toast.success(response.data.message);
       }
     } catch (error) {
       console.error("Error: ", error);
